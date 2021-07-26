@@ -1,24 +1,8 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
+import { Users } from 'src/entities/Users';
 
-export class JoinRequestDto {
-  @ApiProperty({
-    example: 'google@gmail.com',
-    description: '이메일',
-    required: true,
-  })
-  email: string;
-
-  @ApiProperty({
-    example: 'hongildong',
-    description: '닉네임',
-    required: true,
-  })
-  nickname: string;
-
-  @ApiProperty({
-    example: 'password',
-    description: '비밀번호',
-    required: true,
-  })
-  password: string;
-}
+export class JoinRequestDto extends PickType(Users, [
+  'email',
+  'nickname',
+  'password',
+] as const) {}
