@@ -16,6 +16,7 @@ import { DMs } from './DMs';
 import { Mentions } from './Mentions';
 import { WorkspaceMembers } from './WorkspaceMembers';
 import { Users } from './Users';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 @Index('name', ['name'], { unique: true })
 @Index('url', ['url'], { unique: true })
@@ -25,9 +26,13 @@ export class Workspaces {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
+  @IsString()
+  @IsNotEmpty()
   @Column('varchar', { name: 'name', unique: true, length: 30 })
   name: string;
 
+  @IsString()
+  @IsNotEmpty()
   @Column('varchar', { name: 'url', unique: true, length: 30 })
   url: string;
 
@@ -43,29 +48,45 @@ export class Workspaces {
   @Column('int', { name: 'OwnerId', nullable: true })
   OwnerId: number | null;
 
-  @OneToMany(() => Channels, (channels) => channels.Workspace)
+  @OneToMany(
+    () => Channels,
+    channels => channels.Workspace,
+  )
   Channels: Channels[];
 
-  @OneToMany(() => DMs, (dms) => dms.Workspace)
+  @OneToMany(
+    () => DMs,
+    dms => dms.Workspace,
+  )
   DMs: DMs[];
 
-  @OneToMany(() => Mentions, (mentions) => mentions.Workspace)
+  @OneToMany(
+    () => Mentions,
+    mentions => mentions.Workspace,
+  )
   Mentions: Mentions[];
 
   @OneToMany(
     () => WorkspaceMembers,
-    (workspacemembers) => workspacemembers.Workspace,
+    workspacemembers => workspacemembers.Workspace,
     { cascade: ['insert'] },
   )
   WorkspaceMembers: WorkspaceMembers[];
 
-  @ManyToOne(() => Users, (users) => users.Workspaces, {
-    onDelete: 'SET NULL',
-    onUpdate: 'CASCADE',
-  })
+  @ManyToOne(
+    () => Users,
+    users => users.Workspaces,
+    {
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
+    },
+  )
   @JoinColumn([{ name: 'OwnerId', referencedColumnName: 'id' }])
   Owner: Users;
 
-  @ManyToMany(() => Users, (users) => users.Workspaces)
+  @ManyToMany(
+    () => Users,
+    users => users.Workspaces,
+  )
   Members: Users[];
 }
