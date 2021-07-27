@@ -3,6 +3,7 @@ import { ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { User } from 'src/common/decorators/user.decorator';
 import { Users } from 'src/entities/Users';
 import { DmsService } from './dms.service';
+import { PostChatDto } from './dto/post-chat.dto';
 
 @ApiTags('DM')
 @Controller('api/workspaces/:url/dms')
@@ -38,10 +39,15 @@ export class DmsController {
   async createWorkspaceDMChats(
     @Param('url') url,
     @Param('id') id,
-    @Body('content') content,
+    @Body() body: PostChatDto,
     @User() user: Users,
   ) {
-    return this.dmsService.createWorkspaceDMChats(url, content, +id, user.id);
+    return this.dmsService.postChat({
+      url,
+      content: body.content,
+      id: +id,
+      myId: user.id,
+    });
   }
 
   @ApiOperation({ summary: '안 읽은 개수 가져오기' })

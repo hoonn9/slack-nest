@@ -3,16 +3,23 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './httpExeceptionFilter';
+import { HttpExceptionFilter } from './http-exeception.filter';
 import passport from 'passport';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
+// import path from 'path';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 declare const module: any;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const port = app.get(ConfigService).get<number>('PORT') || 3000;
+
+  app.enableCors({
+    origin: true,
+    credentials: true,
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -35,6 +42,10 @@ async function bootstrap() {
   );
   app.use(passport.initialize());
   app.use(passport.session());
+
+  // app.useStaticAssets(path.join(__dirname, '..', 'uploads'), {
+  //   prefix: '/uploads',
+  // });
 
   // Swagger
   const config = new DocumentBuilder()

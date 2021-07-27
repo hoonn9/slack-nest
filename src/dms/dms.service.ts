@@ -15,9 +15,8 @@ export class DmsService {
     @InjectRepository(Workspaces)
     private workspacesRepository: Repository<Workspaces>,
     @InjectRepository(DMs) private dmsRepository: Repository<DMs>,
-    @InjectRepository(Users) private usersRepository: Repository<Users>,
-  ) // private readonly eventsGateway: EventsGateway,
-  {}
+    @InjectRepository(Users) private usersRepository: Repository<Users>, // private readonly eventsGateway: EventsGateway,
+  ) {}
   async getWorkspaceDMs(url: string, myId: number) {
     return (
       this.usersRepository
@@ -50,12 +49,17 @@ export class DmsService {
       .getMany();
   }
 
-  async createWorkspaceDMChats(
-    url: string,
-    content: string,
-    id: number,
-    myId: number,
-  ) {
+  async postChat({
+    url,
+    content,
+    id,
+    myId,
+  }: {
+    url: string;
+    content: string;
+    id: number;
+    myId: number;
+  }) {
     const workspace = await this.workspacesRepository.findOne({
       where: { url },
     });
