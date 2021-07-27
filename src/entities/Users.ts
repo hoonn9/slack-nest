@@ -21,7 +21,7 @@ import { Workspaces } from './Workspaces';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 @Index('email', ['email'], { unique: true })
-@Entity({ schema: 'sleact', name: 'users' })
+@Entity({ schema: 'slack', name: 'users' })
 export class Users {
   @ApiProperty({
     example: 1,

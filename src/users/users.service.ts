@@ -25,6 +25,13 @@ export class UsersService {
     private connection: Connection,
   ) {}
 
+  async findByEmail(email: string) {
+    return this.usersRepository.findOne({
+      where: { email },
+      select: ['id', 'email', 'password'],
+    });
+  }
+
   async join(email: string, nickname: string, password: string) {
     if (!email) {
       throw new BadRequestException('이메일을 입력하세요.');
@@ -78,8 +85,10 @@ export class UsersService {
     } catch (error) {
       Logger.error(error);
       await queryRunner.rollbackTransaction();
+      return false;
     } finally {
       await queryRunner.release();
     }
+    return true;
   }
 }

@@ -14,7 +14,7 @@ import { Users } from './Users';
 @Index('WorkspaceId', ['WorkspaceId'], {})
 @Index('SenderId', ['SenderId'], {})
 @Index('ReceiverId', ['ReceiverId'], {})
-@Entity({ schema: 'sleact', name: 'mentions' })
+@Entity({ schema: 'slack', name: 'mentions' })
 export class Mentions {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
@@ -40,24 +40,36 @@ export class Mentions {
   @Column('int', { name: 'ReceiverId', nullable: true })
   ReceiverId: number | null;
 
-  @ManyToOne(() => Workspaces, (workspaces) => workspaces.Mentions, {
-    onDelete: 'SET NULL',
-    onUpdate: 'CASCADE',
-  })
+  @ManyToOne(
+    () => Workspaces,
+    workspaces => workspaces.Mentions,
+    {
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
+    },
+  )
   @JoinColumn([{ name: 'WorkspaceId', referencedColumnName: 'id' }])
   Workspace: Workspaces;
 
-  @ManyToOne(() => Users, (users) => users.Mentions, {
-    onDelete: 'SET NULL',
-    onUpdate: 'CASCADE',
-  })
+  @ManyToOne(
+    () => Users,
+    users => users.Mentions,
+    {
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
+    },
+  )
   @JoinColumn([{ name: 'SenderId', referencedColumnName: 'id' }])
   Sender: Users;
 
-  @ManyToOne(() => Users, (users) => users.Mentions2, {
-    onDelete: 'SET NULL',
-    onUpdate: 'CASCADE',
-  })
+  @ManyToOne(
+    () => Users,
+    users => users.Mentions2,
+    {
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
+    },
+  )
   @JoinColumn([{ name: 'ReceiverId', referencedColumnName: 'id' }])
   Receiver: Users;
 }

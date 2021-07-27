@@ -21,7 +21,7 @@ import { IsNotEmpty, IsString } from 'class-validator';
 @Index('name', ['name'], { unique: true })
 @Index('url', ['url'], { unique: true })
 @Index('OwnerId', ['OwnerId'], {})
-@Entity({ schema: 'sleact', name: 'workspaces' })
+@Entity({ schema: 'slack', name: 'workspaces' })
 export class Workspaces {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
@@ -51,6 +51,7 @@ export class Workspaces {
   @OneToMany(
     () => Channels,
     channels => channels.Workspace,
+    { cascade: ['insert'] },
   )
   Channels: Channels[];
 

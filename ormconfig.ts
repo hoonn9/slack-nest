@@ -32,7 +32,7 @@ const ormconfig: TypeOrmModuleOptions = {
   synchronize: false,
   charset: 'utf8mb4',
   autoLoadEntities: true,
-  logging: true,
+  logging: process.env.NODE_ENV !== 'production',
   keepConnectionAlive: true, // hot reloading 시 db 연결 유지
 };
 

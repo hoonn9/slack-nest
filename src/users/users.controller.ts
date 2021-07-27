@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  ForbiddenException,
   Get,
+  NotFoundException,
   Post,
   Req,
   Res,
@@ -15,6 +17,7 @@ import { NotLoggedInGuard } from 'src/auth/not-logged-in.guard';
 import { User } from 'src/common/decorators/user.decorator';
 import { UserDto } from 'src/common/dto/user.dto';
 import { UndefinedToNullInterceptor } from 'src/common/interceptors/undefinedToNull.interceptor';
+import { Users } from 'src/entities/Users';
 import { JoinRequestDto } from './dtos/join.request.dto';
 import { UsersService } from './users.service';
 
@@ -35,7 +38,7 @@ export class UsersController {
   })
   @ApiOperation({ summary: '내 정보 조회' })
   @Get()
-  getUsers(@User() user) {
+  async getProfile(@User() user: Users) {
     return user || false;
   }
 
@@ -47,14 +50,27 @@ export class UsersController {
   @ApiOperation({ summary: '회원가입' })
   @UseGuards(NotLoggedInGuard)
   @Post()
-  async joinUser(@Body() data: JoinRequestDto) {
-    await this.usersService.join(data.email, data.nickname, data.password);
+  async join(@Body() data: JoinRequestDto) {
+    const user = this.usersService.findByEmail(data.email);
+    if (!user) {
+      throw new NotFoundException();
+    }
+    const result = await this.usersService.join(
+      data.email,
+      data.nickname,
+      data.password,
+    );
+    if (result) {
+      return 'ok';
+    } else {
+      throw new ForbiddenException();
+    }
   }
 
   @ApiOperation({ summary: '로그인' })
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@User() user) {
+  login(@User() user: Users) {
     return user;
   }
 

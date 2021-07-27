@@ -29,15 +29,16 @@ export class WorkspacesService {
   }
 
   async findMyWorkspaces(myId: number) {
-    return this.workspacesRepository.find({
-      where: {
-        WorkspaceMembers: [
-          {
-            UserId: myId,
-          },
-        ],
-      },
-    });
+    console.log('Check');
+    return this.workspacesRepository
+      .createQueryBuilder('workspace')
+      .innerJoin(
+        'workspace.WorkspaceMembers',
+        'workspaceMembers',
+        'workspaceMembers.UserId = :id',
+        { id: myId },
+      )
+      .getMany();
   }
 
   async createWorkspace(name: string, url: string, myId: number) {

@@ -16,7 +16,7 @@ import { Users } from './Users';
 import { Workspaces } from './Workspaces';
 
 @Index('WorkspaceId', ['WorkspaceId'], {})
-@Entity({ schema: 'sleact' })
+@Entity({ schema: 'slack', name: 'channels' })
 export class Channels {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
@@ -41,21 +41,35 @@ export class Channels {
   @Column('int', { name: 'WorkspaceId', nullable: true })
   WorkspaceId: number | null;
 
-  @OneToMany(() => ChannelChats, (channelchats) => channelchats.Channel)
+  @OneToMany(
+    () => ChannelChats,
+    channelchats => channelchats.Channel,
+  )
   ChannelChats: ChannelChats[];
 
-  @OneToMany(() => ChannelMembers, (channelMembers) => channelMembers.Channel, {
-    cascade: ['insert'],
-  })
+  @OneToMany(
+    () => ChannelMembers,
+    channelMembers => channelMembers.Channel,
+    {
+      cascade: ['insert'],
+    },
+  )
   ChannelMembers: ChannelMembers[];
 
-  @ManyToMany(() => Users, (users) => users.Channels)
+  @ManyToMany(
+    () => Users,
+    users => users.Channels,
+  )
   Members: Users[];
 
-  @ManyToOne(() => Workspaces, (workspaces) => workspaces.Channels, {
-    onDelete: 'SET NULL',
-    onUpdate: 'CASCADE',
-  })
+  @ManyToOne(
+    () => Workspaces,
+    workspaces => workspaces.Channels,
+    {
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
+    },
+  )
   @JoinColumn([{ name: 'WorkspaceId', referencedColumnName: 'id' }])
   Workspace: Workspaces;
 }

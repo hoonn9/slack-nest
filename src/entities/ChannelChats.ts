@@ -13,7 +13,7 @@ import { Channels } from './Channels';
 
 @Index('UserId', ['UserId'], {})
 @Index('ChannelId', ['ChannelId'], {})
-@Entity({ schema: 'sleact', name: 'channelchats' })
+@Entity({ schema: 'slack', name: 'channelchats' })
 export class ChannelChats {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
@@ -33,17 +33,25 @@ export class ChannelChats {
   @Column('int', { name: 'ChannelId', nullable: true })
   ChannelId: number | null;
 
-  @ManyToOne(() => Users, (users) => users.ChannelChats, {
-    onDelete: 'SET NULL',
-    onUpdate: 'CASCADE',
-  })
+  @ManyToOne(
+    () => Users,
+    users => users.ChannelChats,
+    {
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
+    },
+  )
   @JoinColumn([{ name: 'UserId', referencedColumnName: 'id' }])
   User: Users;
 
-  @ManyToOne(() => Channels, (channels) => channels.ChannelChats, {
-    onDelete: 'SET NULL',
-    onUpdate: 'CASCADE',
-  })
+  @ManyToOne(
+    () => Channels,
+    channels => channels.ChannelChats,
+    {
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
+    },
+  )
   @JoinColumn([{ name: 'ChannelId', referencedColumnName: 'id' }])
   Channel: Channels;
 }
