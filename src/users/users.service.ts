@@ -5,11 +5,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Users } from 'src/entities/Users';
+import { Users } from '../entities/Users';
 import { Connection, Repository } from 'typeorm';
 import bcrypt from 'bcrypt';
-import { WorkspaceMembers } from 'src/entities/WorkspaceMembers';
-import { ChannelMembers } from 'src/entities/ChannelMembers';
+import { WorkspaceMembers } from '../entities/WorkspaceMembers';
+import { ChannelMembers } from '../entities/ChannelMembers';
 
 @Injectable()
 export class UsersService {

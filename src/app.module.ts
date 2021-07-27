@@ -8,7 +8,7 @@ import { UsersModule } from './users/users.module';
 import { WorkspacesModule } from './workspaces/workspaces.module';
 import { ChannelsModule } from './channels/channels.module';
 import { DmsModule } from './dms/dms.module';
-import ormconfig from 'ormconfig';
+import ormconfig from '../ormconfig';
 import { AuthModule } from './auth/auth.module';
 import { EventsModule } from './events/events.module';
 import { ServeStaticModule } from '@nestjs/serve-static';

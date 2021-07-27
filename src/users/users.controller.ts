@@ -11,13 +11,13 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { LocalAuthGuard } from 'src/auth/local-auth.guard';
-import { LoggedInGuard } from 'src/auth/logged-in.guard';
-import { NotLoggedInGuard } from 'src/auth/not-logged-in.guard';
-import { User } from 'src/common/decorators/user.decorator';
-import { UserDto } from 'src/common/dto/user.dto';
-import { UndefinedToNullInterceptor } from 'src/common/interceptors/undefinedToNull.interceptor';
-import { Users } from 'src/entities/Users';
+import { LocalAuthGuard } from '../auth/local-auth.guard';
+import { LoggedInGuard } from '../auth/logged-in.guard';
+import { NotLoggedInGuard } from '../auth/not-logged-in.guard';
+import { User } from '../common/decorators/user.decorator';
+import { UserDto } from '../common/dto/user.dto';
+import { UndefinedToNullInterceptor } from '../common/interceptors/undefinedToNull.interceptor';
+import { Users } from '../entities/Users';
 import { JoinRequestDto } from './dtos/join.request.dto';
 import { UsersService } from './users.service';
 

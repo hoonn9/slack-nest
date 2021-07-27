@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { JoinRequestDto } from 'src/users/dtos/join.request.dto';
+import { JoinRequestDto } from '../../users/dtos/join.request.dto';
 
 export class UserDto extends JoinRequestDto {
   @ApiProperty({
