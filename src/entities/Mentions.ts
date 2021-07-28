@@ -11,10 +11,10 @@ import {
 import { Workspaces } from './Workspaces';
 import { Users } from './Users';
 
-@Index('WorkspaceId', ['WorkspaceId'], {})
+@Index('MentionWorkspaceId', ['WorkspaceId'], {})
 @Index('SenderId', ['SenderId'], {})
 @Index('ReceiverId', ['ReceiverId'], {})
-@Entity({ schema: 'slack', name: 'mentions' })
+@Entity({ database: 'slack', name: 'mentions' })
 export class Mentions {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;

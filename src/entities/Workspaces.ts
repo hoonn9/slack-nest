@@ -21,7 +21,7 @@ import { IsNotEmpty, IsString } from 'class-validator';
 @Index('name', ['name'], { unique: true })
 @Index('url', ['url'], { unique: true })
 @Index('OwnerId', ['OwnerId'], {})
-@Entity({ schema: 'slack', name: 'workspaces' })
+@Entity({ database: 'slack', name: 'workspaces' })
 export class Workspaces {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;

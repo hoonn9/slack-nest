@@ -6,7 +6,7 @@ import { DmsService } from './dms.service';
 import { PostChatDto } from './dto/post-chat.dto';
 
 @ApiTags('DM')
-@Controller('api/workspaces/:url/dms')
+@Controller('api/workspaces')
 export class DmsController {
   constructor(private dmsService: DmsService) {}
 
@@ -55,10 +55,4 @@ export class DmsController {
   async getUnreads(@Query('after') after: number) {
     return 0;
   }
-
-  @Post(':name/chats')
-  postChat(@Body() body) {}
-
-  @Post(':name/images')
-  postImages(@Body() body) {}
 }

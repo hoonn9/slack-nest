@@ -11,11 +11,15 @@ import {
 import { Server, Socket } from 'socket.io';
 import { onlineMap } from './onlineMap';
 
-@WebSocketGateway({ namespace: /\/ms-.+/ })
+@WebSocketGateway({ namespace: /\/ws-.+/ })
 export class EventsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   // express에서 io 역할, 이것을 DI해서 사용함
-  @WebSocketServer() public server: Server;
+  @WebSocketServer() public server;
+
+  test(@ConnectedSocket() socket: Socket) {
+    console.log(socket);
+  }
 
   // socket.on
   @SubscribeMessage('login')

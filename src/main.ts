@@ -7,8 +7,9 @@ import { HttpExceptionFilter } from './http-exeception.filter';
 import passport from 'passport';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
-// import path from 'path';
+import FileStore from 'session-file-store';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import helmet from 'helmet';
 
 declare const module: any;
 
@@ -21,6 +22,19 @@ async function bootstrap() {
     credentials: true,
   });
 
+  if (process.env.NODE_ENV === 'production') {
+    app.enable('trust proxy');
+    app.use(helmet({ contentSecurityPolicy: false }));
+  } else {
+    // app.use(morgan('dev'));
+    // app.use(
+    //   cors({
+    //     origin: true,
+    //     credentials: true,
+    //   })
+    // );
+  }
+
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -29,7 +43,23 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
 
   app.use(cookieParser());
-  console.log(' process.env.SECRET', process.env.SECRET);
+  const fileStore = FileStore(session);
+
+  const sessionOptions: session.SessionOptions = {
+    name: 'connect.sid',
+    resave: false,
+    saveUninitialized: false,
+    secret: process.env.COOKIE_SECRET,
+    cookie: {
+      httpOnly: true,
+    },
+  };
+
+  if ((process.env.NODE_ENV = 'production')) {
+    sessionOptions.cookie.secure = true;
+    sessionOptions.proxy = true;
+  }
+
   app.use(
     session({
       resave: false,
@@ -38,14 +68,12 @@ async function bootstrap() {
       cookie: {
         httpOnly: true,
       },
+      store: new fileStore(),
     }),
   );
+
   app.use(passport.initialize());
   app.use(passport.session());
-
-  // app.useStaticAssets(path.join(__dirname, '..', 'uploads'), {
-  //   prefix: '/uploads',
-  // });
 
   // Swagger
   const config = new DocumentBuilder()

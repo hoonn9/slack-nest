@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DMs } from 'src/entities/DMs';
 import { Users } from 'src/entities/Users';
 import { Workspaces } from 'src/entities/Workspaces';
+import { EventsGateway } from 'src/events/events.gateway';
+import { onlineMap } from 'src/events/onlineMap';
 import { Repository } from 'typeorm';
 
 function getKeyByValue(object, value) {
@@ -15,7 +17,8 @@ export class DmsService {
     @InjectRepository(Workspaces)
     private workspacesRepository: Repository<Workspaces>,
     @InjectRepository(DMs) private dmsRepository: Repository<DMs>,
-    @InjectRepository(Users) private usersRepository: Repository<Users>, // private readonly eventsGateway: EventsGateway,
+    @InjectRepository(Users) private usersRepository: Repository<Users>,
+    private eventsGateway: EventsGateway,
   ) {}
   async getWorkspaceDMs(url: string, myId: number) {
     return (
@@ -37,11 +40,11 @@ export class DmsService {
   ) {
     return this.dmsRepository
       .createQueryBuilder('dms')
-      .innerJoinAndSelect('dms.sender', 'sender')
-      .innerJoinAndSelect('dms.receiver', 'receiver')
-      .innerJoin('dms.workspace', 'workspace')
-      .where('dms.senderId = :myId', { myId })
-      .andWhere('dms.receiverId = :id', { id })
+      .innerJoinAndSelect('dms.Sender', 'sender')
+      .innerJoinAndSelect('dms.Receiver', 'receiver')
+      .innerJoin('dms.Workspace', 'workspace')
+      .where('dms.SenderId = :myId AND dms.ReceiverId = :id', { myId, id })
+      .orWhere('dms.ReceiverId = :myId AND dms.SenderId = :id', { myId, id })
       .andWhere('workspace.url = :url', { url })
       .orderBy('dms.createdAt', 'DESC')
       .take(perPage)
@@ -73,10 +76,14 @@ export class DmsService {
       where: { id: savedDm.id },
       relations: ['Sender'],
     });
-    // const receiverSocketId = getKeyByValue(
-    //   onlineMap[`/ws-${workspace.url}`],
-    //   Number(id),
-    // );
-    // this.eventsGateway.server.to(receiverSocketId).emit('dm', dmWithSender);
+    const receiverSocketId = getKeyByValue(
+      onlineMap[`/ws-${workspace.url}`],
+      Number(id),
+    );
+
+    this.eventsGateway.server.server
+      .of(`/ws-${workspace.url}`)
+      .to(receiverSocketId)
+      .emit('dm', dmWithSender);
   }
 }

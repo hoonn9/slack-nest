@@ -10,8 +10,8 @@ import {
 import { Workspaces } from './Workspaces';
 import { Users } from './Users';
 
-@Index('UserId', ['UserId'], {})
-@Entity('workspacemembers', { schema: 'slack' })
+@Index('WorkspaceMemberUserId', ['UserId'], {})
+@Entity('workspacemembers', { database: 'slack' })
 export class WorkspaceMembers {
   @CreateDateColumn()
   createdAt: Date;
@@ -25,8 +25,12 @@ export class WorkspaceMembers {
   @Column('int', { primary: true, name: 'UserId' })
   UserId: number;
 
-  @Column('datetime', { name: 'loggedInAt', nullable: true })
+  @Column('timestamp without time zone', { name: 'loggedInAt', nullable: true })
   loggedInAt: Date | null;
+
+  // mysql
+  // @Column('datetime', { name: 'loggedInAt', nullable: true })
+  // loggedInAt: Date | null;
 
   @ManyToOne(
     () => Workspaces,

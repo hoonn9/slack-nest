@@ -11,7 +11,7 @@ import { Channels } from './Channels';
 import { Users } from './Users';
 
 @Index('UserId', ['UserId'], {})
-@Entity({ schema: 'slack', name: 'channelmembers' })
+@Entity({ database: 'slack', name: 'channelmembers' })
 export class ChannelMembers {
   @CreateDateColumn()
   createdAt: Date;

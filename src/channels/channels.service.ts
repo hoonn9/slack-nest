@@ -33,8 +33,8 @@ export class ChannelsService {
       .createQueryBuilder('channels')
       .innerJoinAndSelect(
         'channels.ChannelMembers',
-        'channelMembers',
-        'channelMembers.userId = :myId',
+        'channelmembers',
+        'channelmembers.UserId = :myId',
         { myId },
       )
       .innerJoinAndSelect(

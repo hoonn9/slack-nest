@@ -11,9 +11,9 @@ import { Workspaces } from './src/entities/Workspaces';
 
 dotenv.config();
 const ormconfig: TypeOrmModuleOptions = {
-  type: 'mysql',
-  host: 'localhost',
-  port: 3306,
+  type: 'postgres',
+  host: process.env.DB_HOST,
+  port: +process.env.DB_PORT,
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
@@ -30,9 +30,9 @@ const ormconfig: TypeOrmModuleOptions = {
   migrations: [__dirname + '/src/migrations/*.ts'],
   cli: { migrationsDir: 'src/migrations' },
   synchronize: false,
-  charset: 'utf8mb4',
   autoLoadEntities: true,
-  logging: process.env.NODE_ENV !== 'production',
+  logging: false,
+  // logging: process.env.NODE_ENV !== 'production',
   keepConnectionAlive: true, // hot reloading 시 db 연결 유지
 };
 

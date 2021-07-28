@@ -11,9 +11,9 @@ import {
 import { Users } from './Users';
 import { Channels } from './Channels';
 
-@Index('UserId', ['UserId'], {})
-@Index('ChannelId', ['ChannelId'], {})
-@Entity({ schema: 'slack', name: 'channelchats' })
+@Index('ChannelChatUserId', ['UserId'], {})
+@Index('ChannelChatChannelId', ['ChannelId'], {})
+@Entity({ database: 'slack', name: 'channelchats' })
 export class ChannelChats {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;

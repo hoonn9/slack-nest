@@ -9,6 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiCookieAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { url } from 'inspector';
 import { LoggedInGuard } from 'src/auth/logged-in.guard';
 import { User } from 'src/common/decorators/user.decorator';
 import { Users } from 'src/entities/Users';
@@ -57,6 +58,16 @@ export class WorkspacesController {
   @ApiOperation({ summary: '워크스페이스 특정멤버 가져오기' })
   @Get(':url/members/:id')
   async getWorkspaceMember(@Param('url') url: string, @Param('id') id: string) {
+    return this.workspacesService.getWorkspaceMember(url, +id);
+  }
+
+  @UseGuards(LoggedInGuard)
+  @ApiOperation({ summary: '워크 스페이스 사용자 정보 조회' })
+  @Get(':url/users/:id')
+  async getWorkspaceUser(
+    @Param('url') url: string,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
     return this.workspacesService.getWorkspaceMember(url, +id);
   }
 }
